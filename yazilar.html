@@ -472,6 +472,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <body>
     <div id="posts"></div>
     <div id="posts"></div>
+    <div id="posts"></div>
     <!-- Üst Navigasyon -->
     <nav class="top-nav">
         <a href="index.html" class="logo">📚 Kitap Kurdu</a>
@@ -1284,5 +1285,38 @@ async function loadPosts() {
 }
 
 loadPosts();
-      </script></body>
+      </script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabaseUrl = "https://oxqobtlcbksfdajnvnoz.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94cW9idGxjYmtzZmRham52bm96Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE5NTE3MzUsImV4cCI6MjA2NzUyNzczNX0.fIC24RysJVlnTS3LAxtqwe1luz3ED_SrfQeLnjmPnMk";
+
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+async function loadPosts() {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    alert("Hata var, konsola bak");
+    console.log(error);
+    return;
+  }
+
+  const container = document.getElementById("posts");
+  container.innerHTML = "";
+
+  data.forEach(post => {
+    container.innerHTML += `
+      <div class="post">
+        <h2>${post.title}</h2>
+        <p>${post.content}</p>
+      </div>
+    `;
+  });
+}
+
+loadPosts();
+</script></body>
 </html>
