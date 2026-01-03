@@ -1298,6 +1298,8 @@ async function loadPosts() {
     .select("*")
     .eq("status", "published")
     .order("created_at", { ascending: false });
+    
+    console.log("DATA:", data);
 
   if (error) {
     alert("Hata var, konsola bak");
