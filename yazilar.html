@@ -468,6 +468,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 </head>
 <body>
+    <div id="posts"></div>
     <!-- Üst Navigasyon -->
     <nav class="top-nav">
         <a href="index.html" class="logo">📚 Kitap Kurdu</a>
@@ -1225,6 +1226,34 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('postsGrid').style.display = 'none';
             document.getElementById('emptyState').style.display = 'block';
         }
-    </script>
+<script type="module">
+import { supabase } from "./supabase-client.js";
+
+async function loadPosts() {
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  const container = document.getElementById("posts");
+  container.innerHTML = "";
+
+  data.forEach(post => {
+    container.innerHTML += `
+      <div class="post">
+        <h2>${post.title}</h2>
+        <p>${post.content}</p>
+      </div>
+    `;
+  });
+}
+
+loadPosts();
+</script>    </script>
 </body>
 </html>
